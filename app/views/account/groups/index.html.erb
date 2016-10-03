@@ -1,28 +1,33 @@
 <div class="col-md-12">
-
+<div class="group">
+  <%= link_to("New group", new_group_path, class: "btn btn-primary pull-right") %>
+  </div>
   <h2 class="text-center"> 我加入的讨论版 </h2>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
+        <td>#</td>
+        <td><%= link_to(group.title, group_path(group)) %></td>
+  <td><%= render_group_description(group) %></td>
+  <td> <%= group.user.email %> </td>
+  <td>
+    <% if current_user && current_user == group.user %>
+      <%= link_to("Edit", edit_group_path(group), class: "btn btn-sm btn-default")%>
+      <%= link_to("Delete", group_path(group),    class: "btn btn-sm btn-default",
+                  method: :delete, data: { confirm: "Are you sure?" } )%>
+    <% end %>
+  </td>
         <th> # </th>
         <th> Title </th>
         <th> Description </th>
+        <td>Creator </td>
         <th> Post Count </th>
         <th> Last Update </th>
       </tr>
     </thead>
-
     <tbody>
-      <% @groups.each do |group| %>
-        <tr>
-          <td> # </td>
-          <td> <%= link_to(group.title, group_path(group)) %> </td>
-           <td><%= simple_format(group.description) %></td>
-          <td> <%= group.posts.count %> </td>
-          <td> <%= group.updated_at %> </td>
-        </tr>
-      <% end %>
+       <%= render :partial => "group_item", :collection => @groups, :as => :group %>
     </tbody>
   </table>
 </div>
